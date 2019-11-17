@@ -53,6 +53,8 @@ protected:
 		void change_button33();
 		void set_names();
     void close_button();
+    void player_label();
+    void game_over();
 		//widgets
 		Gtk::Box	textbox, textbox2;
 		Gtk::Label	label, label2, label3;

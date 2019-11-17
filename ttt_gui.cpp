@@ -99,7 +99,6 @@ ttt_window::ttt_window() :	box(Gtk::ORIENTATION_VERTICAL),  //create window
   button_close.set_can_default();
   button_close.grab_default();
   show_all_children();
-
 }
 
 
@@ -127,6 +126,7 @@ void Board::take_turn(bool player_one, int row, int col){
 bool Board::check_if_space_open(int row, int col){
   return (this->board_array[row][col] == '_') ? TRUE :  FALSE;
 }
+
 
 int Board::calculate_win(){
     if (this->board_array[0][0] == 'X' && this->board_array[0][1] == 'X' && this->board_array[0][2] == 'X'){
@@ -208,6 +208,7 @@ void ttt_window::set_names(){
   player2.name + "\n\nBEGIN!";
   dialog.set_secondary_text(input);
   dialog.run();
+  player_label();
 }
 
 void ttt_window:: set_images(){
@@ -254,6 +255,22 @@ void ttt_window::initialize_buttons_to_white(){
   button_33.set_image(white_image9);
 }
 
+void ttt_window::player_label(){
+  string players;
+  if(player_1_turn){
+    players = player1.name + ", it's your turn.";
+  }else{
+    players = player2.name + ", its your turn.";
+  }
+  label3.set_text(players);
+}
+
+void ttt_window::game_over(){
+  if(game_end){
+    label3.set_text("GAME OVER: Rematch or Close");
+  }
+}
+
 void ttt_window::rematch(){
   if(game_end){
     ttt_board.initialize_board();
@@ -261,6 +278,7 @@ void ttt_window::rematch(){
     player_1_turn = TRUE;
     game_end = FALSE;
     turns = 0;
+    player_label();
   }
 }
 
@@ -279,9 +297,9 @@ void ttt_window::change_button11(){
     }
     turns++;
     if(ttt_board.calculate_win()){
+      games++;
       Gtk::MessageDialog	dialog(*this,	"WINNER",false,Gtk::MESSAGE_INFO);
       if(ttt_board.calculate_win() == 1){
-        games++;
         player1.wins++;
         win = player1.name + " YOU WON!\n\n" + "Score: " + player1.name +
         ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
@@ -303,10 +321,13 @@ void ttt_window::change_button11(){
         ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
       to_string(player2.wins);
       game_end = TRUE;
+      games++;
       dialog.set_secondary_text(win);
       dialog.run();
     }
   }
+  player_label();
+  game_over();
 }
 
 void ttt_window::change_button12(){
@@ -346,10 +367,13 @@ void ttt_window::change_button12(){
         ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
       to_string(player2.wins);
       game_end = TRUE;
+      games++;
       dialog.set_secondary_text(win);
       dialog.run();
     }
   }
+  player_label();
+  game_over();
 }
 
 void ttt_window::change_button13(){
@@ -389,10 +413,13 @@ void ttt_window::change_button13(){
         ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
       to_string(player2.wins);
       game_end = TRUE;
+      games++;
       dialog.set_secondary_text(win);
       dialog.run();
     }
   }
+  player_label();
+  game_over();
 }
 
 void ttt_window::change_button21(){
@@ -432,10 +459,13 @@ void ttt_window::change_button21(){
         ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
       to_string(player2.wins);
       game_end = TRUE;
+      games++;
       dialog.set_secondary_text(win);
       dialog.run();
     }
   }
+  player_label();
+  game_over();
 }
 
 void ttt_window::change_button22(){
@@ -475,10 +505,13 @@ void ttt_window::change_button22(){
         ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
       to_string(player2.wins);
       game_end = TRUE;
+      games++;
       dialog.set_secondary_text(win);
       dialog.run();
     }
   }
+  player_label();
+  game_over();
 }
 
 void ttt_window::change_button23(){
@@ -518,10 +551,13 @@ void ttt_window::change_button23(){
         ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
       to_string(player2.wins);
       game_end = TRUE;
+      games++;
       dialog.set_secondary_text(win);
       dialog.run();
     }
   }
+  player_label();
+  game_over();
 }
 
 void ttt_window::change_button31(){
@@ -561,10 +597,13 @@ void ttt_window::change_button31(){
         ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
       to_string(player2.wins);
       game_end = TRUE;
+      games++;
       dialog.set_secondary_text(win);
       dialog.run();
     }
   }
+  player_label();
+  game_over();
 }
 
 void ttt_window::change_button32(){
@@ -604,10 +643,13 @@ void ttt_window::change_button32(){
         ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
       to_string(player2.wins);
       game_end = TRUE;
+      games++;
       dialog.set_secondary_text(win);
       dialog.run();
     }
   }
+  player_label();
+  game_over();
 }
 
 void ttt_window::change_button33(){
@@ -647,10 +689,13 @@ void ttt_window::change_button33(){
         ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
       to_string(player2.wins);
       game_end = TRUE;
+      games++;
       dialog.set_secondary_text(win);
       dialog.run();
     }
   }
+  player_label();
+  game_over();
 }
 
 void	ttt_window::close_button()
