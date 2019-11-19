@@ -17,6 +17,7 @@ Ai computer;
 Board ttt_board;
 bool player_1_turn = true;
 bool game_end = false;
+bool set_names = false;
 string win;
 int turns = 0;
 int games = 0;
@@ -416,6 +417,7 @@ void ttt_window::set_names() {
     dialog.run();
   }
   player_label();
+  playerNamesSet = true;
 }
 
 void ttt_window::set_images() {
@@ -579,7 +581,7 @@ void ttt_window::change_buttons_win(Board &ttt_board){
 }
 
 void ttt_window::change_button11() {
-  if (ttt_board.check_if_space_open(0, 0) && game_end == FALSE) {
+  if (ttt_board.check_if_space_open(0, 0) && !game_end && playerNamesSet) {
     if (player_1_turn == TRUE) {
       ttt_board.take_turn(player_1_turn, 0, 0);
       player1.turns++;
@@ -628,13 +630,15 @@ void ttt_window::change_button11() {
       dialog.set_secondary_text(win);
       dialog.run();
     }
+    
+    player_label();
   }
-  player_label();
+
   game_over();
 }
 
 void ttt_window::change_button12() {
-  if (ttt_board.check_if_space_open(0, 1) && game_end == FALSE) {
+  if (ttt_board.check_if_space_open(0, 1) && !game_end && playerNamesSet) {
     if (player_1_turn == TRUE) {
       ttt_board.take_turn(player_1_turn, 0, 1);
       player1.turns++;
@@ -683,13 +687,15 @@ void ttt_window::change_button12() {
       dialog.set_secondary_text(win);
       dialog.run();
     }
+    
+    player_label();
   }
-  player_label();
+
   game_over();
 }
 
 void ttt_window::change_button13() {
-  if (ttt_board.check_if_space_open(0, 2) && game_end == FALSE) {
+  if (ttt_board.check_if_space_open(0, 2) && !game_end && playerNamesSet) {
     if (player_1_turn == TRUE) {
       ttt_board.take_turn(player_1_turn, 0, 2);
       player1.turns++;
@@ -738,13 +744,15 @@ void ttt_window::change_button13() {
       dialog.set_secondary_text(win);
       dialog.run();
     }
+    
+    player_label();
   }
-  player_label();
+
   game_over();
 }
 
 void ttt_window::change_button21() {
-  if (ttt_board.check_if_space_open(1, 0) && game_end == FALSE) {
+  if (ttt_board.check_if_space_open(1, 0) && !game_end && playerNamesSet) {
     if (player_1_turn == TRUE) {
       ttt_board.take_turn(player_1_turn, 1, 0);
       player1.turns++;
@@ -794,13 +802,15 @@ void ttt_window::change_button21() {
       dialog.set_secondary_text(win);
       dialog.run();
     }
+    
+    player_label();
   }
-  player_label();
+
   game_over();
 }
 
 void ttt_window::change_button22() {
-  if (ttt_board.check_if_space_open(1, 1) && game_end == FALSE) {
+  if (ttt_board.check_if_space_open(1, 1) && !game_end && playerNamesSet) {
     if (player_1_turn == TRUE) {
       ttt_board.take_turn(player_1_turn, 1, 1);
       player1.turns++;
@@ -849,12 +859,14 @@ void ttt_window::change_button22() {
       dialog.set_secondary_text(win);
       dialog.run();
     }
+    
+    player_label();
   }
-  player_label();
+
   game_over();
 }
 void ttt_window::change_button23() {
-  if (ttt_board.check_if_space_open(1, 2) && game_end == FALSE) {
+  if (ttt_board.check_if_space_open(1, 2) && !game_end && playerNamesSet) {
     if (player_1_turn == TRUE) {
       ttt_board.take_turn(player_1_turn, 1, 2);
       player1.turns++;
@@ -903,13 +915,15 @@ void ttt_window::change_button23() {
       dialog.set_secondary_text(win);
       dialog.run();
     }
+    
+    player_label();
   }
-  player_label();
+
   game_over();
 }
 
 void ttt_window::change_button31() {
-  if (ttt_board.check_if_space_open(2, 0) && game_end == FALSE) {
+  if (ttt_board.check_if_space_open(2, 0) && !game_end && playerNamesSet) {
     if (player_1_turn == TRUE) {
       ttt_board.take_turn(player_1_turn, 2, 0);
       player1.turns++;
@@ -959,13 +973,15 @@ void ttt_window::change_button31() {
       dialog.set_secondary_text(win);
       dialog.run();
     }
+    
+    player_label();
   }
-  player_label();
+
   game_over();
 }
 
 void ttt_window::change_button32() {
-  if (ttt_board.check_if_space_open(2, 1) && game_end == FALSE) {
+  if (ttt_board.check_if_space_open(2, 1) && !game_end && playerNamesSet) {
     if (player_1_turn == TRUE) {
       ttt_board.take_turn(player_1_turn, 2, 1);
       player1.turns++;
@@ -1015,13 +1031,15 @@ void ttt_window::change_button32() {
       dialog.set_secondary_text(win);
       dialog.run();
     }
+    
+    player_label();
   }
-  player_label();
+
   game_over();
 }
 
 void ttt_window::change_button33() {
-  if (ttt_board.check_if_space_open(2, 2) && game_end == FALSE) {
+  if (ttt_board.check_if_space_open(2, 2) && !game_end && playerNamesSet) {
     if (player_1_turn == TRUE) {
       ttt_board.take_turn(player_1_turn, 2, 2);
       player1.turns++;
@@ -1070,8 +1088,10 @@ void ttt_window::change_button33() {
       dialog.set_secondary_text(win);
       dialog.run();
     }
+    
+    player_label();
   }
-  player_label();
+
   game_over();
 }
 
