@@ -169,17 +169,6 @@ void Board::take_turn(bool player_one, int row, int col) {
   }
 }
 
-bool Board::board_full() {
-  for (int i = 0; i < 3; i++) {
-    for (int j = 0; j < 3; j++) {
-      if (this->board_array[i][j] = '_') {
-        return FALSE;
-      }
-    }
-  }
-  return TRUE;
-}
-
 int Board::evaluate() {
   for (int row = 0; row < 3; row++) {
     if (board_array[row][0] == board_array[row][1] &&
