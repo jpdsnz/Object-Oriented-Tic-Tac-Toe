@@ -17,7 +17,7 @@ Ai computer;
 Board ttt_board;
 bool player_1_turn = true;
 bool game_end = false;
-bool set_names = false;
+bool playerNamesSet = false;
 string win;
 int turns = 0;
 int games = 0;
