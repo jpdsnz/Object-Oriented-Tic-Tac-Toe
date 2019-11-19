@@ -630,7 +630,7 @@ void ttt_window::change_button11() {
       dialog.set_secondary_text(win);
       dialog.run();
     }
-    
+
     player_label();
   }
 
@@ -687,7 +687,7 @@ void ttt_window::change_button12() {
       dialog.set_secondary_text(win);
       dialog.run();
     }
-    
+
     player_label();
   }
 
@@ -725,7 +725,6 @@ void ttt_window::change_button13() {
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
           to_string(player2.wins);
       } else {
-        games++;
         player2.wins++;
         win = player2.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
@@ -744,7 +743,7 @@ void ttt_window::change_button13() {
       dialog.set_secondary_text(win);
       dialog.run();
     }
-    
+
     player_label();
   }
 
@@ -782,7 +781,6 @@ void ttt_window::change_button21() {
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
           to_string(player2.wins);
       } else {
-        games++;
         player2.wins++;
         win = player2.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
@@ -802,7 +800,7 @@ void ttt_window::change_button21() {
       dialog.set_secondary_text(win);
       dialog.run();
     }
-    
+
     player_label();
   }
 
@@ -840,7 +838,6 @@ void ttt_window::change_button22() {
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
           to_string(player2.wins);
       } else {
-        games++;
         player2.wins++;
         win = player2.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
@@ -859,7 +856,7 @@ void ttt_window::change_button22() {
       dialog.set_secondary_text(win);
       dialog.run();
     }
-    
+
     player_label();
   }
 
@@ -896,7 +893,6 @@ void ttt_window::change_button23() {
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
           to_string(player2.wins);
       } else {
-        games++;
         player2.wins++;
         win = player2.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
@@ -915,7 +911,7 @@ void ttt_window::change_button23() {
       dialog.set_secondary_text(win);
       dialog.run();
     }
-    
+
     player_label();
   }
 
@@ -954,7 +950,6 @@ void ttt_window::change_button31() {
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
           to_string(player2.wins);
       } else {
-        games++;
         player2.wins++;
         win = player2.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
@@ -973,7 +968,7 @@ void ttt_window::change_button31() {
       dialog.set_secondary_text(win);
       dialog.run();
     }
-    
+
     player_label();
   }
 
@@ -1012,7 +1007,6 @@ void ttt_window::change_button32() {
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
           to_string(player2.wins);
       } else {
-        games++;
         player2.wins++;
         win = player2.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
@@ -1031,7 +1025,7 @@ void ttt_window::change_button32() {
       dialog.set_secondary_text(win);
       dialog.run();
     }
-    
+
     player_label();
   }
 
@@ -1069,7 +1063,6 @@ void ttt_window::change_button33() {
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
           to_string(player2.wins);
       } else {
-        games++;
         player2.wins++;
         win = player2.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
@@ -1088,7 +1081,7 @@ void ttt_window::change_button33() {
       dialog.set_secondary_text(win);
       dialog.run();
     }
-    
+
     player_label();
   }
 
