@@ -11,12 +11,14 @@ using namespace std;
 class Player {
 public:
 
+  int won = 0;    // 0 loss, 1 is won, 2 is tie
   string name;
-  int wins;
+  int wins, loss;
   int turns;
 
   Player() {
     wins = 0;
+    loss = 0;
   }
 };
 
@@ -72,6 +74,8 @@ class ttt_window: public Gtk::Window // main wwindow
   void aimove();
   void change_button();
   void change_buttons_win(Board &ttt_board);
+  void save_stats(Player);
+  void overwrite_stats(vector<string>);
   //widgets
   Gtk::Box textbox,
   textbox2;
