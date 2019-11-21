@@ -2,6 +2,8 @@
 //ID: 1001288553
 #include "ttt_header.h"
 #include <iostream>
+#include <fstream>
+#include <iterator>
 #include <gtkmm.h>
 #include <string.h>
 #include <exception>
@@ -481,7 +483,124 @@ void ttt_window::player_label() {
 void ttt_window::game_over() {
   if (game_end) {
     label3.set_text("GAME OVER: Rematch or Close");
+    save_stats(player1);
+    save_stats(player2);
   }
+}
+
+void ttt_window::save_stats(Player p)
+{
+  ifstream file("stats.txt");
+  bool isPlayerNew = true;
+  string line;
+  vector<string> all_stats;
+  if(file.is_open())
+  {
+    while(getline(file, line))
+    {
+      string name, swins, sloss, sties;
+      stringstream s(line);
+      s >> name >> swins >> sloss >> sties;
+      if(lowercase(name).compare(lowercase(p.name)) == 0)
+      {
+        isPlayerNew = false;
+        string newline;
+        int playerTies = games - p.wins - p.loss;
+        newline.append(p.name); newline.append(" ");
+        if(p.won == 1)
+        {
+          newline.append(to_string(stoi(swins)+1)); newline.append(" ");
+          newline.append(to_string(stoi(sloss))); newline.append(" ");
+          newline.append(to_string(stoi(sties))); newline.append(" ");
+        }
+        else if(p.won == 0)
+        {
+          newline.append(to_string(stoi(swins))); newline.append(" ");
+          newline.append(to_string(stoi(sloss)+1)); newline.append(" ");
+          newline.append(to_string(stoi(sties))); newline.append(" ");
+        }
+        else
+        {
+          newline.append(to_string(stoi(swins))); newline.append(" ");
+          newline.append(to_string(stoi(sloss))); newline.append(" ");
+          newline.append(to_string(stoi(sties)+1)); newline.append(" ");
+        }
+        all_stats.push_back(newline);
+      }
+      else all_stats.push_back(line);
+    }
+
+    if(isPlayerNew)
+    {
+      string newline;
+      int playerTies = games - p.wins - p.loss;
+      newline.append(p.name); newline.append(" ");
+      if(p.won == 1)
+      {
+        newline.append("1"); newline.append(" ");
+        newline.append("0"); newline.append(" ");
+        newline.append("0"); newline.append(" ");
+      }
+      else if(p.won == 0)
+      {
+        newline.append("0"); newline.append(" ");
+        newline.append("1"); newline.append(" ");
+        newline.append("0"); newline.append(" ");
+      }
+      else
+      {
+        newline.append("0"); newline.append(" ");
+        newline.append("0"); newline.append(" ");
+        newline.append("1"); newline.append(" ");
+      }
+      all_stats.push_back(newline);
+    }
+  }
+      /*
+      string name, swins, sloss, sties;
+      stringstream s(line);
+      s >> name >> swins >> sloss >> sties;
+      if(lowercase(name).compare(lowercase(p.name)))
+      {
+        isPlayerNew = false;
+        string newline;
+        int playerTies = games - p.wins - p.loss;
+        newline.append(p.name); newline.append(" ");
+        newline.append(to_string(stoi(swins)+p.wins)); newline.append(" ");
+        newline.append(to_string(stoi(sloss)+p.loss)); newline.append(" ");
+        newline.append(to_string(stoi(sties)+playerTies)); newline.append(" ");
+        all_stats.push_back(newline);
+      }
+      else all_stats.push_back(line);
+    }
+
+    if(isPlayerNew)
+    {
+      string newline;
+      int playerTies = games - p.wins - p.loss;
+      newline.append(p.name); newline.append(" ");
+      newline.append(to_string(p.wins)); newline.append(" ");
+      newline.append(to_string(p.loss)); newline.append(" ");
+      newline.append(to_string(playerTies)); newline.append(" ");
+      all_stats.push_back(newline);
+    }
+  }
+*/
+  file.close();
+
+  overwrite_stats(all_stats);
+}
+
+void ttt_window::overwrite_stats(vector<string> snames)
+{
+  for(int i = 0; i < snames.size(); i++)
+  {
+    cout << snames.at(i);
+  }
+
+  ofstream output_file("stats.txt");
+  ostream_iterator<string> output_iterator(output_file, "\n");
+  copy(snames.begin(), snames.end(), output_iterator);
 }
 
 void ttt_window::rematch() {
@@ -607,11 +726,17 @@ void ttt_window::change_button11() {
       Gtk::MessageDialog dialog( * this, "WINNER", false, Gtk::MESSAGE_INFO);
       if (ttt_board.calculate_win() == 1) {
         player1.wins++;
+        player1.won = 1;
+        player2.loss++;
+        player2.won = 0;
         win = player1.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
           to_string(player2.wins);
       } else {
+        player1.loss++;
+        player1.won = 0;
         player2.wins++;
+        player2.won = 1;
         win = player2.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
           to_string(player2.wins);
@@ -625,6 +750,8 @@ void ttt_window::change_button11() {
       win = "NO WINNER!\n\nScore:  " + player1.name +
         ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
         to_string(player2.wins);
+      player1.won = 2;
+      player2.won = 2;
       game_end = TRUE;
       games++;
       dialog.set_secondary_text(win);
@@ -664,11 +791,17 @@ void ttt_window::change_button12() {
       Gtk::MessageDialog dialog( * this, "WINNER", false, Gtk::MESSAGE_INFO);
       if (ttt_board.calculate_win() == 1) {
         player1.wins++;
+        player1.won = 1;
+        player2.loss++;
+        player2.won = 0;
         win = player1.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
           to_string(player2.wins);
       } else {
+        player1.loss++;
+        player1.won = 0;
         player2.wins++;
+        player2.won = 1;
         win = player2.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
           to_string(player2.wins);
@@ -682,6 +815,8 @@ void ttt_window::change_button12() {
       win = "NO WINNER!\n\nScore:  " + player1.name +
         ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
         to_string(player2.wins);
+      player1.won = 2;
+      player2.won = 2;
       game_end = TRUE;
       games++;
       dialog.set_secondary_text(win);
@@ -721,11 +856,17 @@ void ttt_window::change_button13() {
       Gtk::MessageDialog dialog( * this, "WINNER", false, Gtk::MESSAGE_INFO);
       if (ttt_board.calculate_win() == 1) {
         player1.wins++;
+        player1.won = 1;
+        player2.loss++;
+        player2.won = 0;
         win = player1.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
           to_string(player2.wins);
       } else {
+        player1.loss++;
+        player1.won = 0;
         player2.wins++;
+        player2.won = 1;
         win = player2.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
           to_string(player2.wins);
@@ -733,11 +874,14 @@ void ttt_window::change_button13() {
       change_buttons_win(ttt_board);
       dialog.set_secondary_text(win);
       dialog.run();
-    } else if (turns == 9) {
+    }
+    if (turns == 9 && ttt_board.calculate_win() == 0) {
       Gtk::MessageDialog dialog( * this, "DRAW", false, Gtk::MESSAGE_INFO);
       win = "NO WINNER!\n\nScore:  " + player1.name +
         ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
         to_string(player2.wins);
+      player1.won = 2;
+      player2.won = 2;
       game_end = TRUE;
       games++;
       dialog.set_secondary_text(win);
@@ -777,11 +921,17 @@ void ttt_window::change_button21() {
       Gtk::MessageDialog dialog( * this, "WINNER", false, Gtk::MESSAGE_INFO);
       if (ttt_board.calculate_win() == 1) {
         player1.wins++;
+        player1.won = 1;
+        player2.loss++;
+        player2.won = 0;
         win = player1.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
           to_string(player2.wins);
       } else {
+        player1.loss++;
+        player1.won = 0;
         player2.wins++;
+        player2.won = 1;
         win = player2.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
           to_string(player2.wins);
@@ -789,12 +939,14 @@ void ttt_window::change_button21() {
       change_buttons_win(ttt_board);
       dialog.set_secondary_text(win);
       dialog.run();
-
-    } else if (turns == 9) {
+    }
+    if (turns == 9 && ttt_board.calculate_win() == 0) {
       Gtk::MessageDialog dialog( * this, "DRAW", false, Gtk::MESSAGE_INFO);
       win = "NO WINNER!\n\nScore:  " + player1.name +
         ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
         to_string(player2.wins);
+      player1.won = 2;
+      player2.won = 2;
       game_end = TRUE;
       games++;
       dialog.set_secondary_text(win);
@@ -834,11 +986,17 @@ void ttt_window::change_button22() {
       Gtk::MessageDialog dialog( * this, "WINNER", false, Gtk::MESSAGE_INFO);
       if (ttt_board.calculate_win() == 1) {
         player1.wins++;
+        player1.won = 1;
+        player2.loss++;
+        player2.won = 0;
         win = player1.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
           to_string(player2.wins);
       } else {
+        player1.loss++;
+        player1.won = 0;
         player2.wins++;
+        player2.won = 1;
         win = player2.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
           to_string(player2.wins);
@@ -846,11 +1004,14 @@ void ttt_window::change_button22() {
       change_buttons_win(ttt_board);
       dialog.set_secondary_text(win);
       dialog.run();
-    } else if (turns == 9) {
+    }
+    if (turns == 9 && ttt_board.calculate_win() == 0) {
       Gtk::MessageDialog dialog( * this, "DRAW", false, Gtk::MESSAGE_INFO);
       win = "NO WINNER!\n\nScore:  " + player1.name +
         ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
         to_string(player2.wins);
+      player1.won = 2;
+      player2.won = 2;
       game_end = TRUE;
       games++;
       dialog.set_secondary_text(win);
@@ -889,11 +1050,17 @@ void ttt_window::change_button23() {
       Gtk::MessageDialog dialog( * this, "WINNER", false, Gtk::MESSAGE_INFO);
       if (ttt_board.calculate_win() == 1) {
         player1.wins++;
+        player1.won = 1;
+        player2.loss++;
+        player2.won = 0;
         win = player1.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
           to_string(player2.wins);
       } else {
+        player1.loss++;
+        player1.won = 0;
         player2.wins++;
+        player2.won = 1;
         win = player2.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
           to_string(player2.wins);
@@ -901,11 +1068,14 @@ void ttt_window::change_button23() {
       change_buttons_win(ttt_board);
       dialog.set_secondary_text(win);
       dialog.run();
-    } else if (turns == 9) {
+    }
+    if (turns == 9 && ttt_board.calculate_win() == 0) {
       Gtk::MessageDialog dialog( * this, "DRAW", false, Gtk::MESSAGE_INFO);
       win = "NO WINNER!\n\nScore:  " + player1.name +
         ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
         to_string(player2.wins);
+      player1.won = 2;
+      player2.won = 2;
       game_end = TRUE;
       games++;
       dialog.set_secondary_text(win);
@@ -946,11 +1116,17 @@ void ttt_window::change_button31() {
       Gtk::MessageDialog dialog( * this, "WINNER", false, Gtk::MESSAGE_INFO);
       if (ttt_board.calculate_win() == 1) {
         player1.wins++;
+        player1.won = 1;
+        player2.loss++;
+        player2.won = 0;
         win = player1.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
           to_string(player2.wins);
       } else {
+        player1.loss++;
+        player1.won = 0;
         player2.wins++;
+        player2.won = 1;
         win = player2.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
           to_string(player2.wins);
@@ -958,11 +1134,14 @@ void ttt_window::change_button31() {
       change_buttons_win(ttt_board);
       dialog.set_secondary_text(win);
       dialog.run();
-    } else if (turns == 9) {
+    }
+    if (turns == 9 && ttt_board.calculate_win() == 0) {
       Gtk::MessageDialog dialog( * this, "DRAW", false, Gtk::MESSAGE_INFO);
       win = "NO WINNER!\n\nScore:  " + player1.name +
         ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
         to_string(player2.wins);
+      player1.won = 2;
+      player2.won = 2;
       game_end = TRUE;
       games++;
       dialog.set_secondary_text(win);
@@ -1003,11 +1182,17 @@ void ttt_window::change_button32() {
       Gtk::MessageDialog dialog( * this, "WINNER", false, Gtk::MESSAGE_INFO);
       if (ttt_board.calculate_win() == 1) {
         player1.wins++;
+        player1.won = 1;
+        player2.loss++;
+        player2.won = 0;
         win = player1.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
           to_string(player2.wins);
       } else {
+        player1.loss++;
+        player1.won = 0;
         player2.wins++;
+        player2.won = 1;
         win = player2.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
           to_string(player2.wins);
@@ -1015,11 +1200,14 @@ void ttt_window::change_button32() {
       change_buttons_win(ttt_board);
       dialog.set_secondary_text(win);
       dialog.run();
-    } else if (turns == 9) {
+    }
+    if (turns == 9 && ttt_board.calculate_win() == 0) {
       Gtk::MessageDialog dialog( * this, "DRAW", false, Gtk::MESSAGE_INFO);
       win = "NO WINNER!\n\nScore:  " + player1.name +
         ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
         to_string(player2.wins);
+      player1.won = 2;
+      player2.won = 2;
       game_end = TRUE;
       games++;
       dialog.set_secondary_text(win);
@@ -1059,11 +1247,17 @@ void ttt_window::change_button33() {
       Gtk::MessageDialog dialog( * this, "WINNER", false, Gtk::MESSAGE_INFO);
       if (ttt_board.calculate_win() == 1) {
         player1.wins++;
+        player1.won = 1;
+        player2.loss++;
+        player2.won = 0;
         win = player1.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
           to_string(player2.wins);
       } else {
+        player1.loss++;
+        player1.won = 0;
         player2.wins++;
+        player2.won = 1;
         win = player2.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
           to_string(player2.wins);
@@ -1071,11 +1265,14 @@ void ttt_window::change_button33() {
       change_buttons_win(ttt_board);
       dialog.set_secondary_text(win);
       dialog.run();
-    } else if (turns == 9) {
+    }
+    if (turns == 9 && ttt_board.calculate_win() == 0) {
       Gtk::MessageDialog dialog( * this, "DRAW", false, Gtk::MESSAGE_INFO);
       win = "NO WINNER!\n\nScore:  " + player1.name +
         ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
         to_string(player2.wins);
+      player1.won = 2;
+      player2.won = 2;
       game_end = TRUE;
       games++;
       dialog.set_secondary_text(win);
