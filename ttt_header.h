@@ -76,12 +76,14 @@ class ttt_window: public Gtk::Window // main wwindow
   void change_buttons_win(Board &ttt_board);
   void save_stats(Player);
   void overwrite_stats(vector<string>);
+  void statLabelUpdate();
   //widgets
   Gtk::Box textbox,
   textbox2;
   Gtk::Label label,
   label2,
-  label3;
+  label3, winLabel, loseLabel;
+  Gtk::VBox vbox1;
   Gtk::Box box;
   Gtk::Entry entry,
   entry2;

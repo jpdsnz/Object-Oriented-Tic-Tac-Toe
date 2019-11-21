@@ -57,6 +57,15 @@ ttt_window::ttt_window(): box(Gtk::ORIENTATION_VERTICAL), //create window
     entry2.select_region(0, entry2.get_text_length());
     grid.attach(entry2, 1, 2, 1, 2);
     grid.attach(textbox2, 1, 2, 1, 2);
+
+    ////Win Label//////
+    winLabel.set_text("\tStats go here");
+
+    vbox1.pack_start(winLabel);
+    //vbox1.set_margin_start(5);
+    grid.attach(vbox1, 4, 0, 1, 2);//(col, row, width, height)
+    ////End label/////
+
     button_set.signal_clicked().connect(sigc::mem_fun( * this, // close button
       &
       ttt_window::set_names));
@@ -762,6 +771,7 @@ void ttt_window::change_button11() {
   }
 
   game_over();
+  statLabelUpdate();
 }
 
 void ttt_window::change_button12() {
@@ -827,6 +837,7 @@ void ttt_window::change_button12() {
   }
 
   game_over();
+  statLabelUpdate();
 }
 
 void ttt_window::change_button13() {
@@ -892,6 +903,7 @@ void ttt_window::change_button13() {
   }
 
   game_over();
+  statLabelUpdate();
 }
 
 void ttt_window::change_button21() {
@@ -957,6 +969,7 @@ void ttt_window::change_button21() {
   }
 
   game_over();
+  statLabelUpdate();
 }
 
 void ttt_window::change_button22() {
@@ -1022,6 +1035,7 @@ void ttt_window::change_button22() {
   }
 
   game_over();
+  statLabelUpdate();
 }
 void ttt_window::change_button23() {
   if (ttt_board.check_if_space_open(1, 2) && !game_end && playerNamesSet) {
@@ -1086,6 +1100,7 @@ void ttt_window::change_button23() {
   }
 
   game_over();
+  statLabelUpdate();
 }
 
 void ttt_window::change_button31() {
@@ -1152,6 +1167,7 @@ void ttt_window::change_button31() {
   }
 
   game_over();
+  statLabelUpdate();
 }
 
 void ttt_window::change_button32() {
@@ -1218,6 +1234,7 @@ void ttt_window::change_button32() {
   }
 
   game_over();
+  statLabelUpdate();
 }
 
 void ttt_window::change_button33() {
@@ -1283,6 +1300,18 @@ void ttt_window::change_button33() {
   }
 
   game_over();
+  statLabelUpdate();
+}
+
+void ttt_window::statLabelUpdate()
+{
+  string stats;
+  int pstats, p2stats;
+  pstats = (((double) player1.wins / (double) games) * 100);
+  p2stats = (((double) player2.wins / (double) games) * 100);
+  stats = "\tSCORE:\t" + player1.name + ":\t" + to_string(player1.wins) + "\n\t\t\t\t" +
+    player2.name + ":\t" + to_string(player2.wins);
+  winLabel.set_text(stats);
 }
 
 void ttt_window::close_button() {
