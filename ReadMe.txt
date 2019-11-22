@@ -1,4 +1,5 @@
 Install the SFM library:
+password: student
 
 sudo apt-get install libsfml-dev
 ---------------------------------------------
