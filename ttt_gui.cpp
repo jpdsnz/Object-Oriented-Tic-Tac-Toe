@@ -36,6 +36,7 @@ string win;
 bool names_set = FALSE;
 int turns = 0;
 int games = 0;
+vector<string> all_stats;
 
 string lowercase(string word) { //function to convert string to all lowercase
   for (int i = 0; i < word.size(); i++) {
@@ -47,7 +48,8 @@ string lowercase(string word) { //function to convert string to all lowercase
 ttt_window::ttt_window(): box(Gtk::ORIENTATION_VERTICAL), //create window
   hbox(Gtk::ORIENTATION_VERTICAL, 1), hbox2(Gtk::ORIENTATION_VERTICAL, 1),
   hbox3(Gtk::ORIENTATION_VERTICAL, 1), close_hbox(Gtk::ORIENTATION_HORIZONTAL, 1),
-  button_close("Close"), button_set("Set Names"), button_rematch("Rematch") {
+  button_close("Close"), button_set("Set Names"), button_rematch("Rematch"), button_stats("Stats") {
+	ttt_board.read_stats();
     set_images();
     initialize_buttons_to_white();
     ttt_board.initialize_board();
@@ -118,14 +120,18 @@ ttt_window::ttt_window(): box(Gtk::ORIENTATION_VERTICAL), //create window
     box.pack_start(hbox, 1, 1, 5);
     box.pack_start(hbox2, 1, 1, 5);
     box.pack_start(hbox3, 1, 1, 5);
+	
+	button_stats.signal_clicked().connect(sigc::mem_fun(*this, &ttt_window::stats_button));
+	close_hbox.pack_start(button_stats, 1, 1, 0);
     button_rematch.signal_clicked().connect(sigc::mem_fun( * this, // close button
       &
       ttt_window::rematch));
-    close_hbox.pack_start(button_rematch, 1, 1, 0);
+    close_hbox.pack_start(button_rematch, 1, 1, 1);
+	
     button_close.signal_clicked().connect(sigc::mem_fun( * this, // close button
       &
       ttt_window::close_button));
-    close_hbox.pack_start(button_close, 1, 1, 1);
+    close_hbox.pack_start(button_close, 1, 1, 2);
     box.pack_start(close_hbox, 1, 1, 5);
     button_close.set_can_default();
     button_close.grab_default();
@@ -140,6 +146,21 @@ ttt_window::ttt_window(): box(Gtk::ORIENTATION_VERTICAL), //create window
   }
 
 ttt_window::~ttt_window() {}
+
+void ttt_window::stats_button()
+{
+	vector<string> topten_stats = ttt_board.show_topten();
+	Gtk::MessageDialog dialog( * this, "Stats", false, Gtk::MESSAGE_INFO);
+	string input;
+	for(int i = 0; i < topten_stats.size(); i++)
+	{
+		input.append(to_string(i+1)); input.append(". ");
+		input.append(topten_stats.at(i));
+		input.append("\n");
+	}
+    dialog.set_secondary_text(input);
+    dialog.run();
+}
 
 void ttt_window::change_button() {
   for (int y = 0; y < 3; y++) {
@@ -371,67 +392,99 @@ bool Board::check_if_space_open(int row, int col) {
 
 int Board::calculate_win() {
   if (this->board_array[0][0] == 'X' && this->board_array[0][1] == 'X' && this->board_array[0][2] == 'X') {
+	player1.hasWon = 1;
+	player2.hasWon = 2;
     game_end = TRUE;
     return 1;
   }
   if (this->board_array[1][0] == 'X' && this->board_array[1][1] == 'X' && this->board_array[1][2] == 'X') {
+	player1.hasWon = 1;
+	player2.hasWon = 2;
     game_end = TRUE;
     return 1;
   }
   if (this->board_array[2][0] == 'X' && this->board_array[2][1] == 'X' && this->board_array[2][2] == 'X') {
+	player1.hasWon = 1;
+	player2.hasWon = 2;
     game_end = TRUE;
     return 1;
   }
   if (this->board_array[0][0] == 'X' && this->board_array[1][0] == 'X' && this->board_array[2][0] == 'X') {
+	player1.hasWon = 1;
+	player2.hasWon = 2;
     game_end = TRUE;
     return 1;
   }
   if (this->board_array[0][1] == 'X' && this->board_array[1][1] == 'X' && this->board_array[2][1] == 'X') {
+	player1.hasWon = 1;
+	player2.hasWon = 2;
     game_end = TRUE;
     return 1;
   }
   if (this->board_array[0][2] == 'X' && this->board_array[1][2] == 'X' && this->board_array[2][2] == 'X') {
+	player1.hasWon = 1;
+	player2.hasWon = 2;
     game_end = TRUE;
     return 1;
   }
   if (this->board_array[0][0] == 'X' && this->board_array[1][1] == 'X' && this->board_array[2][2] == 'X') {
+	player1.hasWon = 1;
+	player2.hasWon = 2;
     game_end = TRUE;
     return 1;
   }
   if (this->board_array[2][0] == 'X' && this->board_array[1][1] == 'X' && this->board_array[0][2] == 'X') {
+	player1.hasWon = 1;
+	player2.hasWon = 2;
     game_end = TRUE;
     return 1;
   }
   //second player
   if (this->board_array[0][0] == 'O' && this->board_array[0][1] == 'O' && this->board_array[0][2] == 'O') {
+	player1.hasWon = 2;
+	player2.hasWon = 1;
     game_end = TRUE;
     return 2;
   }
   if (this->board_array[1][0] == 'O' && this->board_array[1][1] == 'O' && this->board_array[1][2] == 'O') {
+	player1.hasWon = 2;
+	player2.hasWon = 1;
     game_end = TRUE;
     return 2;
   }
   if (this->board_array[2][0] == 'O' && this->board_array[2][1] == 'O' && this->board_array[2][2] == 'O') {
+	player1.hasWon = 2;
+	player2.hasWon = 1;
     game_end = TRUE;
     return 2;
   }
   if (this->board_array[0][0] == 'O' && this->board_array[1][0] == 'O' && this->board_array[2][0] == 'O') {
+	player1.hasWon = 2;
+	player2.hasWon = 1;
     game_end = TRUE;
     return 2;
   }
   if (this->board_array[0][1] == 'O' && this->board_array[1][1] == 'O' && this->board_array[2][1] == 'O') {
+	player1.hasWon = 2;
+	player2.hasWon = 1;
     game_end = TRUE;
     return 2;
   }
   if (this->board_array[0][2] == 'O' && this->board_array[1][2] == 'O' && this->board_array[2][2] == 'O') {
+	player1.hasWon = 2;
+	player2.hasWon = 1;
     game_end = TRUE;
     return 2;
   }
   if (this->board_array[0][0] == 'O' && this->board_array[1][1] == 'O' && this->board_array[2][2] == 'O') {
+	player1.hasWon = 2;
+	player2.hasWon = 1;
     game_end = TRUE;
     return 2;
   }
   if (this->board_array[2][0] == 'O' && this->board_array[1][1] == 'O' && this->board_array[0][2] == 'O') {
+	player1.hasWon = 2;
+	player2.hasWon = 1;
     game_end = TRUE;
     return 2;
   }
@@ -530,6 +583,9 @@ void ttt_window::player_label() {
 
 void ttt_window::game_over() {
   if (game_end) {
+	cout << "player1haswon = " << player1.hasWon << "\n" << "player2haswon = " << player2.hasWon << endl;
+	ttt_board.save_stats(player1);
+	ttt_board.save_stats(player2);
     label3.set_text("GAME OVER: Rematch or Close");
   }
 }
@@ -682,12 +738,14 @@ void ttt_window::change_button11() {
       Gtk::MessageDialog dialog( * this, "WINNER", false, Gtk::MESSAGE_INFO);
       if (ttt_board.calculate_win() == 1) {
         player1.wins++;
+		player2.loss++;
         win = player1.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
           to_string(player2.wins);
         std::thread sfx_1(play_sound);
 			  sfx_1.join();
       } else {
+		player1.loss++;
         player2.wins++;
         win = player2.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
@@ -704,6 +762,8 @@ void ttt_window::change_button11() {
       win = "NO WINNER!\n\nScore:  " + player1.name +
         ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
         to_string(player2.wins);
+		player1.hasWon = 3;
+		player2.hasWon = 3;
       game_end = TRUE;
       games++;
       dialog.set_secondary_text(win);
@@ -752,12 +812,14 @@ void ttt_window::change_button12() {
         std::thread sfx_1(play_sound);
         sfx_1.join();
         player1.wins++;
+		player2.loss++;
         win = player1.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
           to_string(player2.wins);
       } else {
         std::thread sfx_1(play_sound);
         sfx_1.join();
+		player1.loss++;
         player2.wins++;
         win = player2.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
@@ -773,6 +835,8 @@ void ttt_window::change_button12() {
         ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
         to_string(player2.wins);
       game_end = TRUE;
+		player1.hasWon = 3;
+		player2.hasWon = 3;
       games++;
       dialog.set_secondary_text(win);
       dialog.run();
@@ -820,12 +884,14 @@ void ttt_window::change_button13() {
         std::thread sfx_1(play_sound);
         sfx_1.join();
         player1.wins++;
+		player2.loss++;
         win = player1.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
           to_string(player2.wins);
       } else {
         std::thread sfx_1(play_sound);
         sfx_1.join();
+		player1.loss++;
         player2.wins++;
         win = player2.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
@@ -840,6 +906,8 @@ void ttt_window::change_button13() {
         ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
         to_string(player2.wins);
       game_end = TRUE;
+		player1.hasWon = 3;
+		player2.hasWon = 3;
       games++;
       dialog.set_secondary_text(win);
       dialog.run();
@@ -886,12 +954,14 @@ void ttt_window::change_button21() {
         std::thread sfx_1(play_sound);
         sfx_1.join();
         player1.wins++;
+		player2.loss++;
         win = player1.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
           to_string(player2.wins);
       } else {
         std::thread sfx_1(play_sound);
         sfx_1.join();
+		player1.loss++;
         player2.wins++;
         win = player2.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
@@ -907,6 +977,8 @@ void ttt_window::change_button21() {
         ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
         to_string(player2.wins);
       game_end = TRUE;
+		player1.hasWon = 3;
+		player2.hasWon = 3;
       games++;
       dialog.set_secondary_text(win);
       dialog.run();
@@ -954,12 +1026,14 @@ void ttt_window::change_button22() {
         std::thread sfx_1(play_sound);
         sfx_1.join();
         player1.wins++;
+		player2.loss++;
         win = player1.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
           to_string(player2.wins);
       } else {
         std::thread sfx_1(play_sound);
         sfx_1.join();
+		player1.loss++;
         player2.wins++;
         win = player2.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
@@ -974,6 +1048,8 @@ void ttt_window::change_button22() {
         ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
         to_string(player2.wins);
       game_end = TRUE;
+		player1.hasWon = 3;
+		player2.hasWon = 3;
       games++;
       dialog.set_secondary_text(win);
       dialog.run();
@@ -1021,12 +1097,14 @@ void ttt_window::change_button23() {
         std::thread sfx_1(play_sound);
         sfx_1.join();
         player1.wins++;
+		player2.loss++;
         win = player1.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
           to_string(player2.wins);
       } else {
         std::thread sfx_1(play_sound);
         sfx_1.join();
+		player1.loss++;
         player2.wins++;
         win = player2.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
@@ -1041,6 +1119,8 @@ void ttt_window::change_button23() {
         ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
         to_string(player2.wins);
       game_end = TRUE;
+		player1.hasWon = 3;
+		player2.hasWon = 3;
       games++;
       dialog.set_secondary_text(win);
       dialog.run();
@@ -1088,12 +1168,14 @@ void ttt_window::change_button31() {
         std::thread sfx_1(play_sound);
         sfx_1.join();
         player1.wins++;
+		player2.loss++;
         win = player1.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
           to_string(player2.wins);
       } else {
         std::thread sfx_1(play_sound);
         sfx_1.join();
+		player1.loss++;
         player2.wins++;
         win = player2.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
@@ -1108,6 +1190,8 @@ void ttt_window::change_button31() {
         ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
         to_string(player2.wins);
       game_end = TRUE;
+		player1.hasWon = 3;
+		player2.hasWon = 3;
       games++;
       dialog.set_secondary_text(win);
       dialog.run();
@@ -1155,12 +1239,14 @@ void ttt_window::change_button32() {
         std::thread sfx_1(play_sound);
         sfx_1.join();
         player1.wins++;
+		player2.loss++;
         win = player1.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
           to_string(player2.wins);
       } else {
         std::thread sfx_1(play_sound);
         sfx_1.join();
+		player1.loss++;
         player2.wins++;
         win = player2.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
@@ -1175,6 +1261,8 @@ void ttt_window::change_button32() {
         ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
         to_string(player2.wins);
       game_end = TRUE;
+		player1.hasWon = 3;
+		player2.hasWon = 3;
       games++;
       dialog.set_secondary_text(win);
       dialog.run();
@@ -1222,12 +1310,14 @@ void ttt_window::change_button33() {
         std::thread sfx_1(play_sound);
         sfx_1.join();
         player1.wins++;
+		player2.loss++;
         win = player1.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
           to_string(player2.wins);
       } else {
         std::thread sfx_1(play_sound);
         sfx_1.join();
+		player1.loss++;
         player2.wins++;
         win = player2.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
@@ -1242,6 +1332,8 @@ void ttt_window::change_button33() {
         ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
         to_string(player2.wins);
       game_end = TRUE;
+		player1.hasWon = 3;
+		player2.hasWon = 3;
       games++;
       dialog.set_secondary_text(win);
       dialog.run();
@@ -1264,4 +1356,217 @@ void ttt_window::close_button() {
     ": " + to_string(p2stats) + "%";
   dialog.set_secondary_text(stats);
   dialog.run();
+  ttt_board.overwrite_stats();
+  //ttt_board.show_topten();
+}
+
+bool Board::is_empty(std::ifstream& pFile)
+{
+    return pFile.peek() == std::ifstream::traits_type::eof();
+}
+
+void Board::read_stats()
+{
+	ifstream file("stats.txt");
+	string line;
+	if(file.is_open())
+	{
+		if(!is_empty(file))
+		{
+			while(getline(file, line))
+			{
+				string newline;
+				string name, swins, sloss, sties;
+				stringstream s(line);
+				s >> name >> swins >> sloss >> sties;
+				newline.append(name); newline.append(" ");
+				newline.append(swins); newline.append(" ");
+				newline.append(sloss); newline.append(" ");
+				newline.append(sties);
+				all_stats.push_back(newline);
+			}
+		}
+		else
+		{
+			cout << "No stats to gather..." << endl;
+		}
+	}
+	
+	file.close();
+	
+	if(!all_stats.empty())
+	{
+		for(int i = 0; i < all_stats.size(); i++)
+		{
+			cout << all_stats.at(i) << endl;
+		}
+	}
+}
+
+void Board::save_stats(Player p)
+{
+	if(!all_stats.empty())
+	{
+		bool isPlayerNew = true;
+		for(int i = 0; i < all_stats.size(); i++)
+		{
+			string line = all_stats.at(i);
+			stringstream s(line);
+			string name, swins, sloss, sties;
+			s >> name >> swins >> sloss >> sties;
+			if(lowercase(name).compare(lowercase(p.name)) == 0)
+			{
+				isPlayerNew = false;
+				string newline;
+				int playerTies = games - p.wins - p.loss;
+				newline.append(p.name); newline.append(" ");
+				if(p.hasWon == 1)
+				{
+					newline.append(to_string(stoi(swins)+1)); newline.append(" ");
+					newline.append(to_string(stoi(sloss))); newline.append(" ");
+					newline.append(to_string(stoi(sties))); newline.append(" ");
+					p.hasWon = 0;
+				}
+				else if(p.hasWon == 2)
+				{
+					newline.append(to_string(stoi(swins))); newline.append(" ");
+					newline.append(to_string(stoi(sloss)+1)); newline.append(" ");
+					newline.append(to_string(stoi(sties))); newline.append(" ");
+					p.hasWon = 0;
+				}
+				else if(p.hasWon == 3)
+				{
+					newline.append(to_string(stoi(swins))); newline.append(" ");
+					newline.append(to_string(stoi(sloss))); newline.append(" ");
+					newline.append(to_string(stoi(sties)+1)); newline.append(" ");
+					p.hasWon = 0;
+				}
+				all_stats.at(i) = newline;
+			}
+		}
+		if(isPlayerNew)
+		{
+			string newline;
+			int playerTies = games - p.wins - p.loss;
+			newline.append(p.name); newline.append(" ");
+			if(p.hasWon == 1)
+			{
+				newline.append("1"); newline.append(" ");
+				newline.append("0"); newline.append(" ");
+				newline.append("0"); newline.append(" ");
+				p.hasWon = 0;
+			}
+			else if(p.hasWon == 2)
+			{
+				newline.append("0"); newline.append(" ");
+				newline.append("1"); newline.append(" ");
+				newline.append("0"); newline.append(" ");
+				p.hasWon = 0;
+			}
+			else if(p.hasWon == 3)
+			{
+				newline.append("0"); newline.append(" ");
+				newline.append("0"); newline.append(" ");
+				newline.append("1"); newline.append(" ");
+				p.hasWon = 0;
+			}
+			all_stats.push_back(newline);
+		}
+	}
+	else
+	{
+		string newline;
+		int playerTies = games - p.wins - p.loss;
+		newline.append(p.name); newline.append(" ");
+		if(p.hasWon == 1)
+		{
+			newline.append("1"); newline.append(" ");
+			newline.append("0"); newline.append(" ");
+			newline.append("0"); newline.append(" ");
+			p.hasWon = 0;
+		}
+		else if(p.hasWon == 2)
+		{
+			newline.append("0"); newline.append(" ");
+			newline.append("1"); newline.append(" ");
+			newline.append("0"); newline.append(" ");
+			p.hasWon = 0;
+		}
+		else if(p.hasWon == 3)
+		{
+			newline.append("0"); newline.append(" ");
+			newline.append("0"); newline.append(" ");
+			newline.append("1"); newline.append(" ");
+			p.hasWon = 0;
+		}
+		all_stats.push_back(newline);
+	}
+	
+	if(!all_stats.empty())
+	{
+		overwrite_stats();
+	}
+}
+
+void Board::overwrite_stats()
+{
+	if(!all_stats.empty())
+	{
+		ofstream output_file("stats.txt");
+		ostream_iterator<string> output_iterator(output_file, "\n");
+		copy(all_stats.begin(), all_stats.end(), output_iterator);
+	}
+}
+
+vector<string> Board::show_topten()
+{
+	vector<string> topten_stats;
+	if(!all_stats.empty())
+	{
+		int temp[all_stats.size()][2];
+		for(int i = 0; i < all_stats.size(); i++)
+		{
+			string line = all_stats.at(i);
+			stringstream s(line);
+			string name, swins, sloss, sties;
+			s >> name >> swins >> sloss >> sties;
+			temp[i][0] = i;
+			temp[i][1] = stoi(swins);
+		}
+		
+		int t, t2;
+		for(int i = 0; i < all_stats.size(); i++)
+		{
+			for(int j = i+1; j < all_stats.size(); j++)
+			{
+				if(temp[i][1] < temp[j][1])
+				{
+					t = temp[i][0];
+					t2 = temp[i][1];
+				
+					temp[i][0] = temp[j][0];
+					temp[i][1] = temp[j][1];
+					
+					temp[j][0] = t;
+					temp[j][1] = t2;
+				}
+			}
+		}
+		
+		//cout << "**** top ten:" << endl;
+		for(int i = 0; i < all_stats.size(); i++)
+		{
+			topten_stats.push_back(all_stats.at(temp[i][0]));
+			//cout << topten_stats.at(i) << endl;
+		}
+		
+		//return topten_stats;
+	}
+	else
+	{
+		topten_stats.push_back("No stats!");
+		//return topten_stats
+	}
+	
+	return topten_stats;
 }
