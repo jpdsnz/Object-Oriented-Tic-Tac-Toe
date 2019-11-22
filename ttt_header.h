@@ -34,7 +34,6 @@ public:
   bool check_if_space_open(int row, int col);
   int evaluate();
   bool isMovesLeft();
-  bool board_full();
 };
 
 struct Move {

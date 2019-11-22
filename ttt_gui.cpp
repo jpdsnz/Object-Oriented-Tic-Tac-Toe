@@ -1,15 +1,30 @@
-// Justin Erdmann
-//ID: 1001288553
 #include "ttt_header.h"
 #include <iostream>
+#include <fstream>
+#include <iterator>
 #include <gtkmm.h>
-#include <string.h>
+#include <string>
 #include <exception>
+#include <SFML/Audio.hpp>
 #include <vector>
 #include <chrono>
 #include <thread>
 
 using namespace std;
+
+static sf::SoundBuffer buffer;
+static sf::Sound sound;
+
+void play_sound()
+{
+  //sf::Music music;
+	//sf::SoundBuffer buffer;
+	if (!buffer.loadFromFile("sound.wav"))
+		exit(0);
+	sound.setBuffer(buffer);
+	sound.play();
+			//return -1;
+}
 
 Player player1;
 Player player2;
@@ -18,6 +33,7 @@ Board ttt_board;
 bool player_1_turn = true;
 bool game_end = false;
 string win;
+bool names_set = FALSE;
 int turns = 0;
 int games = 0;
 
@@ -169,16 +185,6 @@ void Board::take_turn(bool player_one, int row, int col) {
   }
 }
 
-bool Board::board_full() {
-  for (int i = 0; i < 3; i++) {
-    for (int j = 0; j < 3; j++) {
-      if (this->board_array[i][j] = '_') {
-        return FALSE;
-      }
-    }
-  }
-  return TRUE;
-}
 
 int Board::evaluate() {
   for (int row = 0; row < 3; row++) {
@@ -343,6 +349,7 @@ Move makeRandMove(char board[3][3])
   randMove.col = -1 ;
   int col, row ;
 
+
   while(1)
   {
     //random column and row values
@@ -434,6 +441,7 @@ int Board::calculate_win() {
 }
 
 void ttt_window::set_names() {
+  names_set = TRUE;
   player1.name = entry.get_text();
   player2.name = entry2.get_text();
   //play the hard computer player
@@ -542,88 +550,104 @@ void ttt_window::change_buttons_win(Board &ttt_board){
       button_11.set_image(x_image_win);
       button_12.set_image(x_image_win2);
       button_13.set_image(x_image_win3);
+      return;
     }
     if (ttt_board.board_array[1][0] == 'X' && ttt_board.board_array[1][1] == 'X' && ttt_board.board_array[1][2] == 'X') {
       button_21.set_image(x_image_win);
       button_22.set_image(x_image_win2);
       button_23.set_image(x_image_win3);
+      return;
     }
     if (ttt_board.board_array[2][0] == 'X' && ttt_board.board_array[2][1] == 'X' && ttt_board.board_array[2][2] == 'X') {
       button_31.set_image(x_image_win);
       button_32.set_image(x_image_win2);
       button_33.set_image(x_image_win3);
+      return;
     }
     if (ttt_board.board_array[0][0] == 'X' && ttt_board.board_array[1][0] == 'X' && ttt_board.board_array[2][0] == 'X') {
       button_11.set_image(x_image_win);
       button_21.set_image(x_image_win2);
       button_31.set_image(x_image_win3);
+      return;
     }
     if (ttt_board.board_array[0][1] == 'X' && ttt_board.board_array[1][1] == 'X' && ttt_board.board_array[2][1] == 'X') {
       button_12.set_image(x_image_win);
       button_22.set_image(x_image_win2);
       button_32.set_image(x_image_win3);
+      return;
     }
     if (ttt_board.board_array[0][2] == 'X' && ttt_board.board_array[1][2] == 'X' && ttt_board.board_array[2][2] == 'X') {
       button_13.set_image(x_image_win);
       button_23.set_image(x_image_win2);
       button_33.set_image(x_image_win3);
+      return;
     }
     if (ttt_board.board_array[0][0] == 'X' && ttt_board.board_array[1][1] == 'X' && ttt_board.board_array[2][2] == 'X') {
       button_11.set_image(x_image_win);
       button_22.set_image(x_image_win2);
       button_33.set_image(x_image_win3);
+      return;
     }
     if (ttt_board.board_array[2][0] == 'X' && ttt_board.board_array[1][1] == 'X' && ttt_board.board_array[0][2] == 'X') {
       button_31.set_image(x_image_win);
       button_22.set_image(x_image_win2);
       button_13.set_image(x_image_win3);
+      return;
     }
     //second player
     if (ttt_board.board_array[0][0] == 'O' && ttt_board.board_array[0][1] == 'O' && ttt_board.board_array[0][2] == 'O') {
       button_11.set_image(o_image_win);
       button_12.set_image(o_image_win2);
       button_13.set_image(o_image_win3);
+      return;
     }
     if (ttt_board.board_array[1][0] == 'O' && ttt_board.board_array[1][1] == 'O' && ttt_board.board_array[1][2] == 'O') {
       button_21.set_image(o_image_win);
       button_22.set_image(o_image_win2);
       button_23.set_image(o_image_win3);
+      return;
     }
     if (ttt_board.board_array[2][0] == 'O' && ttt_board.board_array[2][1] == 'O' && ttt_board.board_array[2][2] == 'O') {
       button_31.set_image(o_image_win);
       button_32.set_image(o_image_win2);
       button_33.set_image(o_image_win3);
+      return;
     }
     if (ttt_board.board_array[0][0] == 'O' && ttt_board.board_array[1][0] == 'O' && ttt_board.board_array[2][0] == 'O') {
       button_11.set_image(o_image_win);
       button_21.set_image(o_image_win2);
       button_31.set_image(o_image_win3);
+      return;
     }
     if (ttt_board.board_array[0][1] == 'O' && ttt_board.board_array[1][1] == 'O' && ttt_board.board_array[2][1] == 'O') {
       button_12.set_image(o_image_win);
       button_22.set_image(o_image_win2);
       button_32.set_image(o_image_win3);
+      return;
     }
     if (ttt_board.board_array[0][2] == 'O' && ttt_board.board_array[1][2] == 'O' && ttt_board.board_array[2][2] == 'O') {
       button_13.set_image(o_image_win);
       button_23.set_image(o_image_win2);
       button_33.set_image(o_image_win3);
+      return;
     }
     if (ttt_board.board_array[0][0] == 'O' && ttt_board.board_array[1][1] == 'O' && ttt_board.board_array[2][2] == 'O') {
       button_11.set_image(o_image_win);
       button_22.set_image(o_image_win2);
       button_33.set_image(o_image_win3);
+      return;
     }
     if (ttt_board.board_array[2][0] == 'O' && ttt_board.board_array[1][1] == 'O' && ttt_board.board_array[0][2] == 'O') {
       button_31.set_image(o_image_win);
       button_22.set_image(o_image_win2);
       button_13.set_image(o_image_win3);
+      return;
     }
 
 }
 
 void ttt_window::change_button11() {
-  if (ttt_board.check_if_space_open(0, 0) && game_end == FALSE) {
+  if (ttt_board.check_if_space_open(0, 0) && game_end == FALSE && names_set) {
     if (player_1_turn == TRUE) {
       ttt_board.take_turn(player_1_turn, 0, 0);
       player1.turns++;
@@ -645,7 +669,7 @@ void ttt_window::change_button11() {
       turns++;
     }
 
-    else if(lowercase(player2.name) == "randomcomputer" && turns < 9)
+    else if(lowercase(player2.name) == "randomcomputer" && turns < 9 && !ttt_board.calculate_win())
     {
       Move randMove = makeRandMove(ttt_board.board_array) ;
       ttt_board.board_array[randMove.row][randMove.col] = 'O' ;
@@ -653,10 +677,6 @@ void ttt_window::change_button11() {
       player_1_turn = TRUE ;
       turns++ ;
     }
-
-
-
-
     if (ttt_board.calculate_win()) {
       games++;
       Gtk::MessageDialog dialog( * this, "WINNER", false, Gtk::MESSAGE_INFO);
@@ -665,11 +685,15 @@ void ttt_window::change_button11() {
         win = player1.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
           to_string(player2.wins);
+        std::thread sfx_1(play_sound);
+			  sfx_1.join();
       } else {
         player2.wins++;
         win = player2.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
           to_string(player2.wins);
+        std::thread sfx_1(play_sound);
+				sfx_1.join();
       }
       change_buttons_win(ttt_board);
       dialog.set_secondary_text(win);
@@ -685,13 +709,13 @@ void ttt_window::change_button11() {
       dialog.set_secondary_text(win);
       dialog.run();
     }
+    player_label();
+    game_over();
   }
-  player_label();
-  game_over();
 }
 
 void ttt_window::change_button12() {
-  if (ttt_board.check_if_space_open(0, 1) && game_end == FALSE) {
+  if (ttt_board.check_if_space_open(0, 1) && game_end == FALSE && names_set) {
     if (player_1_turn == TRUE) {
       ttt_board.take_turn(player_1_turn, 0, 1);
       player1.turns++;
@@ -712,7 +736,7 @@ void ttt_window::change_button12() {
       player_1_turn = TRUE;
       turns++;
     }
-    else if(lowercase(player2.name) == "randomcomputer" && turns < 9)
+    else if(lowercase(player2.name) == "randomcomputer" && turns < 9 && !ttt_board.calculate_win())
     {
       Move randMove = makeRandMove(ttt_board.board_array) ;
       ttt_board.board_array[randMove.row][randMove.col] = 'O' ;
@@ -725,11 +749,15 @@ void ttt_window::change_button12() {
       games++;
       Gtk::MessageDialog dialog( * this, "WINNER", false, Gtk::MESSAGE_INFO);
       if (ttt_board.calculate_win() == 1) {
+        std::thread sfx_1(play_sound);
+        sfx_1.join();
         player1.wins++;
         win = player1.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
           to_string(player2.wins);
       } else {
+        std::thread sfx_1(play_sound);
+        sfx_1.join();
         player2.wins++;
         win = player2.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
@@ -749,13 +777,13 @@ void ttt_window::change_button12() {
       dialog.set_secondary_text(win);
       dialog.run();
     }
+    player_label();
+    game_over();
   }
-  player_label();
-  game_over();
 }
 
 void ttt_window::change_button13() {
-  if (ttt_board.check_if_space_open(0, 2) && game_end == FALSE) {
+  if (ttt_board.check_if_space_open(0, 2) && game_end == FALSE && names_set) {
     if (player_1_turn == TRUE) {
       ttt_board.take_turn(player_1_turn, 0, 2);
       player1.turns++;
@@ -776,7 +804,7 @@ void ttt_window::change_button13() {
       player_1_turn = TRUE;
       turns++;
     }
-    else if(lowercase(player2.name) == "randomcomputer" && turns < 9)
+    else if(lowercase(player2.name) == "randomcomputer" && turns < 9 && !ttt_board.calculate_win())
     {
       Move randMove = makeRandMove(ttt_board.board_array) ;
       ttt_board.board_array[randMove.row][randMove.col] = 'O' ;
@@ -789,12 +817,15 @@ void ttt_window::change_button13() {
       games++;
       Gtk::MessageDialog dialog( * this, "WINNER", false, Gtk::MESSAGE_INFO);
       if (ttt_board.calculate_win() == 1) {
+        std::thread sfx_1(play_sound);
+        sfx_1.join();
         player1.wins++;
         win = player1.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
           to_string(player2.wins);
       } else {
-        games++;
+        std::thread sfx_1(play_sound);
+        sfx_1.join();
         player2.wins++;
         win = player2.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
@@ -813,13 +844,13 @@ void ttt_window::change_button13() {
       dialog.set_secondary_text(win);
       dialog.run();
     }
+    player_label();
+    game_over();
   }
-  player_label();
-  game_over();
 }
 
 void ttt_window::change_button21() {
-  if (ttt_board.check_if_space_open(1, 0) && game_end == FALSE) {
+  if (ttt_board.check_if_space_open(1, 0) && game_end == FALSE && names_set) {
     if (player_1_turn == TRUE) {
       ttt_board.take_turn(player_1_turn, 1, 0);
       player1.turns++;
@@ -840,7 +871,7 @@ void ttt_window::change_button21() {
       player_1_turn = TRUE;
       turns++;
     }
-    else if(lowercase(player2.name) == "randomcomputer" && turns < 9)
+    else if(lowercase(player2.name) == "randomcomputer" && turns < 9 && !ttt_board.calculate_win())
     {
       Move randMove = makeRandMove(ttt_board.board_array) ;
       ttt_board.board_array[randMove.row][randMove.col] = 'O' ;
@@ -852,12 +883,15 @@ void ttt_window::change_button21() {
       games++;
       Gtk::MessageDialog dialog( * this, "WINNER", false, Gtk::MESSAGE_INFO);
       if (ttt_board.calculate_win() == 1) {
+        std::thread sfx_1(play_sound);
+        sfx_1.join();
         player1.wins++;
         win = player1.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
           to_string(player2.wins);
       } else {
-        games++;
+        std::thread sfx_1(play_sound);
+        sfx_1.join();
         player2.wins++;
         win = player2.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
@@ -877,13 +911,13 @@ void ttt_window::change_button21() {
       dialog.set_secondary_text(win);
       dialog.run();
     }
+    player_label();
+    game_over();
   }
-  player_label();
-  game_over();
 }
 
 void ttt_window::change_button22() {
-  if (ttt_board.check_if_space_open(1, 1) && game_end == FALSE) {
+  if (ttt_board.check_if_space_open(1, 1) && game_end == FALSE && names_set) {
     if (player_1_turn == TRUE) {
       ttt_board.take_turn(player_1_turn, 1, 1);
       player1.turns++;
@@ -904,7 +938,7 @@ void ttt_window::change_button22() {
       player_1_turn = TRUE;
       turns++;
     }
-    else if(lowercase(player2.name) == "randomcomputer" && turns < 9)
+    else if(lowercase(player2.name) == "randomcomputer" && turns < 9 && !ttt_board.calculate_win())
     {
       Move randMove = makeRandMove(ttt_board.board_array) ;
       ttt_board.board_array[randMove.row][randMove.col] = 'O' ;
@@ -917,12 +951,15 @@ void ttt_window::change_button22() {
       games++;
       Gtk::MessageDialog dialog( * this, "WINNER", false, Gtk::MESSAGE_INFO);
       if (ttt_board.calculate_win() == 1) {
+        std::thread sfx_1(play_sound);
+        sfx_1.join();
         player1.wins++;
         win = player1.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
           to_string(player2.wins);
       } else {
-        games++;
+        std::thread sfx_1(play_sound);
+        sfx_1.join();
         player2.wins++;
         win = player2.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
@@ -941,13 +978,13 @@ void ttt_window::change_button22() {
       dialog.set_secondary_text(win);
       dialog.run();
     }
+    player_label();
+    game_over();
   }
-  player_label();
-  game_over();
 }
 
 void ttt_window::change_button23() {
-  if (ttt_board.check_if_space_open(1, 2) && game_end == FALSE) {
+  if (ttt_board.check_if_space_open(1, 2) && game_end == FALSE && names_set) {
     if (player_1_turn == TRUE) {
       ttt_board.take_turn(player_1_turn, 1, 2);
       player1.turns++;
@@ -968,7 +1005,7 @@ void ttt_window::change_button23() {
       player_1_turn = TRUE;
       turns++;
     }
-    else if(lowercase(player2.name) == "randomcomputer" && turns < 9)
+    else if(lowercase(player2.name) == "randomcomputer" && turns < 9 && !ttt_board.calculate_win())
     {
       Move randMove = makeRandMove(ttt_board.board_array) ;
       ttt_board.board_array[randMove.row][randMove.col] = 'O' ;
@@ -981,12 +1018,15 @@ void ttt_window::change_button23() {
       games++;
       Gtk::MessageDialog dialog( * this, "WINNER", false, Gtk::MESSAGE_INFO);
       if (ttt_board.calculate_win() == 1) {
+        std::thread sfx_1(play_sound);
+        sfx_1.join();
         player1.wins++;
         win = player1.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
           to_string(player2.wins);
       } else {
-        games++;
+        std::thread sfx_1(play_sound);
+        sfx_1.join();
         player2.wins++;
         win = player2.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
@@ -1005,13 +1045,13 @@ void ttt_window::change_button23() {
       dialog.set_secondary_text(win);
       dialog.run();
     }
+    player_label();
+    game_over();
   }
-  player_label();
-  game_over();
 }
 
 void ttt_window::change_button31() {
-  if (ttt_board.check_if_space_open(2, 0) && game_end == FALSE) {
+  if (ttt_board.check_if_space_open(2, 0) && game_end == FALSE && names_set) {
     if (player_1_turn == TRUE) {
       ttt_board.take_turn(player_1_turn, 2, 0);
       player1.turns++;
@@ -1032,7 +1072,7 @@ void ttt_window::change_button31() {
       player_1_turn = TRUE;
       turns++;
     }
-    else if(lowercase(player2.name) == "randomcomputer" && turns < 9)
+    else if(lowercase(player2.name) == "randomcomputer" && turns < 9 && !ttt_board.calculate_win())
     {
       Move randMove = makeRandMove(ttt_board.board_array) ;
       ttt_board.board_array[randMove.row][randMove.col] = 'O' ;
@@ -1045,12 +1085,15 @@ void ttt_window::change_button31() {
       games++;
       Gtk::MessageDialog dialog( * this, "WINNER", false, Gtk::MESSAGE_INFO);
       if (ttt_board.calculate_win() == 1) {
+        std::thread sfx_1(play_sound);
+        sfx_1.join();
         player1.wins++;
         win = player1.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
           to_string(player2.wins);
       } else {
-        games++;
+        std::thread sfx_1(play_sound);
+        sfx_1.join();
         player2.wins++;
         win = player2.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
@@ -1069,13 +1112,13 @@ void ttt_window::change_button31() {
       dialog.set_secondary_text(win);
       dialog.run();
     }
+    player_label();
+    game_over();
   }
-  player_label();
-  game_over();
 }
 
 void ttt_window::change_button32() {
-  if (ttt_board.check_if_space_open(2, 1) && game_end == FALSE) {
+  if (ttt_board.check_if_space_open(2, 1) && game_end == FALSE && names_set) {
     if (player_1_turn == TRUE) {
       ttt_board.take_turn(player_1_turn, 2, 1);
       player1.turns++;
@@ -1096,7 +1139,7 @@ void ttt_window::change_button32() {
       player_1_turn = TRUE;
       turns++;
     }
-    else if(lowercase(player2.name) == "randomcomputer" && turns < 9)
+    else if(lowercase(player2.name) == "randomcomputer" && turns < 9 && !ttt_board.calculate_win())
     {
       Move randMove = makeRandMove(ttt_board.board_array) ;
       ttt_board.board_array[randMove.row][randMove.col] = 'O' ;
@@ -1109,12 +1152,15 @@ void ttt_window::change_button32() {
       games++;
       Gtk::MessageDialog dialog( * this, "WINNER", false, Gtk::MESSAGE_INFO);
       if (ttt_board.calculate_win() == 1) {
+        std::thread sfx_1(play_sound);
+        sfx_1.join();
         player1.wins++;
         win = player1.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
           to_string(player2.wins);
       } else {
-        games++;
+        std::thread sfx_1(play_sound);
+        sfx_1.join();
         player2.wins++;
         win = player2.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
@@ -1133,13 +1179,13 @@ void ttt_window::change_button32() {
       dialog.set_secondary_text(win);
       dialog.run();
     }
+    player_label();
+    game_over();
   }
-  player_label();
-  game_over();
 }
 
 void ttt_window::change_button33() {
-  if (ttt_board.check_if_space_open(2, 2) && game_end == FALSE) {
+  if (ttt_board.check_if_space_open(2, 2) && game_end == FALSE && names_set) {
     if (player_1_turn == TRUE) {
       ttt_board.take_turn(player_1_turn, 2, 2);
       player1.turns++;
@@ -1160,7 +1206,7 @@ void ttt_window::change_button33() {
       player_1_turn = TRUE;
       turns++;
     }
-    else if(lowercase(player2.name) == "randomcomputer" && turns < 9)
+    else if(lowercase(player2.name) == "randomcomputer" && turns < 9 && !ttt_board.calculate_win())
     {
       Move randMove = makeRandMove(ttt_board.board_array) ;
       ttt_board.board_array[randMove.row][randMove.col] = 'O' ;
@@ -1173,12 +1219,15 @@ void ttt_window::change_button33() {
       games++;
       Gtk::MessageDialog dialog( * this, "WINNER", false, Gtk::MESSAGE_INFO);
       if (ttt_board.calculate_win() == 1) {
+        std::thread sfx_1(play_sound);
+        sfx_1.join();
         player1.wins++;
         win = player1.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
           to_string(player2.wins);
       } else {
-        games++;
+        std::thread sfx_1(play_sound);
+        sfx_1.join();
         player2.wins++;
         win = player2.name + " YOU WON!\n\n" + "Score:  " + player1.name +
           ": " + to_string(player1.wins) + "\n\t\t" + player2.name + ": " +
@@ -1197,9 +1246,9 @@ void ttt_window::change_button33() {
       dialog.set_secondary_text(win);
       dialog.run();
     }
+    player_label();
+    game_over();
   }
-  player_label();
-  game_over();
 }
 
 void ttt_window::close_button() {
