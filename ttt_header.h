@@ -12,8 +12,9 @@ class Player {
 public:
 
   string name;
-  int wins;
+  int wins, loss;
   int turns;
+  int hasWon;
 
   Player() {
     wins = 0;
@@ -34,6 +35,11 @@ public:
   bool check_if_space_open(int row, int col);
   int evaluate();
   bool isMovesLeft();
+  bool is_empty(std::ifstream& pFile);
+  void read_stats();
+  void overwrite_stats();
+  void save_stats(Player);
+  vector<string> show_topten();
 };
 
 struct Move {
@@ -68,6 +74,7 @@ class ttt_window: public Gtk::Window // main wwindow
   void change_button33();
   void set_names();
   void close_button();
+  void stats_button();
   void player_label();
   void game_over();
   void aimove();
@@ -93,7 +100,8 @@ class ttt_window: public Gtk::Window // main wwindow
   button_32,
   button_33,
   button_set,
-  button_rematch;
+  button_rematch,
+  button_stats;
   Gtk::HBox hbox,
   hbox2,
   hbox3,
