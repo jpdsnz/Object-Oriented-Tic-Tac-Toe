@@ -34,6 +34,7 @@ public:
   bool check_if_space_open(int row, int col);
   int evaluate();
   bool isMovesLeft();
+  bool board_full();
 };
 
 struct Move {
@@ -45,6 +46,7 @@ public:
 
   void performMove(Board & board_array);
   int minimax(char board[3][3], int depth, bool isMax);
+  int randmove(char board[3][3]) ;
 };
 
 class ttt_window: public Gtk::Window // main wwindow
