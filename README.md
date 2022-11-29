@@ -1,11 +1,11 @@
-# Object-Oriented-Tic-Tac-Toe
+# ♟ Object-Oriented-Tic-Tac-Toe Game Application
 -----------------------------
 
-Install the SFM library:
-
-sudo apt-get install libsfml-dev
+📕 Instructions: 
+  - Install the SFM 🔊 library:
+    - sudo apt-get install libsfml-dev
 ---------------------------------------------
-More info can be found here:
-https://www.sfml-dev.org/tutorials/2.5/start-linux.php
+🔊 More info on audio library can be found here:
+  - https://www.sfml-dev.org/tutorials/2.5/start-linux.php
 ---------------------------------------------
-After install just type make as usual.
+📕 After install just type make as usual.
