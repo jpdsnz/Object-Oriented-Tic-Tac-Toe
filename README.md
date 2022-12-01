@@ -1,4 +1,4 @@
-# ♟ Object-Oriented-Tic-Tac-Toe Game Application
+#  Object-Oriented-Tic-Tac-Toe Game Application
 -----------------------------
 ![Game](https://github.com/jpdsnz/Object-Oriented-Tic-Tac-Toe/blob/3a3d3da60b74e3d8b14ec9be5e14d30b447a01ce/ttt.jpg?raw=true)
 
