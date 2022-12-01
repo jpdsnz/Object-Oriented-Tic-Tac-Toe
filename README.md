@@ -1,6 +1,6 @@
 #  🕹 Object-Oriented-Tic-Tac-Toe Game Application
 -----------------------------
-- This was a group project that different functions of the game to be developed by each team member
+- This was a group project that delegated different functions of the game as tasks to be developed by each team member
 
 <p align="center">
       <img width="50%" height="50%" src="https://github.com/jpdsnz/Object-Oriented-Tic-Tac-Toe/blob/3a3d3da60b74e3d8b14ec9be5e14d30b447a01ce/ttt.jpg?raw=true">
