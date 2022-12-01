@@ -9,13 +9,13 @@
 
 ## 📕 Instructions: 
   - Install the SFM 🔊 library:
-    - sudo apt-get install libsfml-dev
+    - `sudo apt-get install libsfml-dev`
 ---------------------------------------------
 🔊 More info on audio library can be found here:
   - https://www.sfml-dev.org/tutorials/2.5/start-linux.php
 ---------------------------------------------
 ## 📕 After SFM install:
-  - make
+  - `make`
   
 ## 🎲 Features: 
   - User names
