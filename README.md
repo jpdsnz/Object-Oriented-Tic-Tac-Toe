@@ -19,6 +19,7 @@
 
 ## 📕 Instructions: 
   - Install the SFM 🔊 library:
+    - `cd files`
     - `sudo apt-get install libsfml-dev`
 ---------------------------------------------
 🔊 More info on audio library can be found here:
