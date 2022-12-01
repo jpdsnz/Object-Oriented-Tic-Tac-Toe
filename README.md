@@ -4,7 +4,7 @@
 
 🕹 Demo:
 
-[![Click to Watch the Video Demo](https://raw.githubusercontent.com/jpdsnz/jpdsnz/main/youtube-blank.jpg))](https://drive.google.com/file/d/1NC70aIaqlYXPKp74di4__m-X-F_LfqGK/view?usp=share_link)
+[![Click to Watch the Video Demo](https://raw.githubusercontent.com/jpdsnz/jpdsnz/main/youtube-blank.jpg)](https://drive.google.com/file/d/1NC70aIaqlYXPKp74di4__m-X-F_LfqGK/view?usp=share_link)
 
 
 📕 Instructions: 
