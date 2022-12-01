@@ -23,7 +23,7 @@
   - Unbeatable mode
   
 ## 🔧 Tools Used:
-  - C++ (Object Oriented Programming)
-  - Gtk+ (Interface)
-  - SFM (Audio Library)
-  - Multi-Threading
+      - C++ (Object Oriented Programming)
+      - Gtk+ (Interface)
+      - SFM (Audio Library)
+      - Multi-Threading
